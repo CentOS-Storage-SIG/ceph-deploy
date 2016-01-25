@@ -1,0 +1,14 @@
+diff -rU4 ceph-deploy-1.5.31/ceph_deploy/install.py ceph-deploy-1.5.31-mine/ceph_deploy/install.py
+--- ceph-deploy-1.5.31/ceph_deploy/install.py	2016-01-04 19:46:44.000000000 +0100
++++ ceph-deploy-1.5.31-mine/ceph_deploy/install.py	2016-01-24 18:38:10.992191644 +0100
+@@ -548,9 +548,9 @@
+         help='install repo files only (skips package installation)',
+     )
+ 
+     repo.set_defaults(
+-        adjust_repos=True,
++        adjust_repos=False,
+     )
+ 
+     parser.add_argument(
+         'host',

@@ -11,16 +11,15 @@
 # common
 #################################################################################
 Name:           ceph-deploy
-Version:        1.5.31
-Release:        1%{?dist}
+Version:        1.5.33
+Release:        0%{?dist}
 Summary:        Admin and deploy tool for Ceph
 License:        MIT
 Group:          System/Filesystems
-URL:            http://ceph.com/
-# fcami - TODO => fix source URL (github? pypi.python.org?)
-#         NB: upstream's 1.5.31.tar.bz2 tarball is identical to github's, except
-#             for minor egg_info metadata.
-Source0:        %{name}-%{version}.tar.bz2
+URL:            https://github.com/ceph/ceph-deploy
+# fcami - solve tarball discrepancy between github, pypi and ceph.com...
+#Source0         https://github.com/ceph/%{name}/archive/v%{version}.tar.gz
+Source0:        %{name}-%{version}.tar.gz
 # fcami - this patch disables using upstream's repositories by default
 Patch0:         ceph-deploy_do-not-use-upstream-repos.patch
 BuildRoot:      %{_tmppath}/%{name}-%{version}-build
@@ -78,6 +77,12 @@ install -m 0755 -D scripts/ceph-deploy $RPM_BUILD_ROOT/usr/bin
 %{python_sitelib}/*
 
 %changelog
+* Sat May 07 2016 François Cami <fcami@redhat.com> - 1.5.33-0
+- Import upstream ceph-deploy-1.5.33
+
+* Tue Jan 26 2016 François Cami <fcami@redhat.com> - 1.5.31-2
+- spec cleanup: remove SuSE-specific stuff & fix Source0 and URL
+
 * Fri Jan 22 2016 François Cami <fcami@redhat.com> - 1.5.31-1
 - initial CentOS release
 - use upstream (ceph.com) ceph-deploy.spec, add dist tag

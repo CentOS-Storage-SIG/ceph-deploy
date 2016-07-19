@@ -11,7 +11,7 @@
 # common
 #################################################################################
 Name:           ceph-deploy
-Version:        1.5.31
+Version:        1.5.32
 Release:        1%{?dist}
 Summary:        Admin and deploy tool for Ceph
 License:        MIT
@@ -20,24 +20,19 @@ URL:            http://ceph.com/
 # fcami - TODO => fix source URL (github? pypi.python.org?)
 #         NB: upstream's 1.5.31.tar.bz2 tarball is identical to github's, except
 #             for minor egg_info metadata.
-Source0:        %{name}-%{version}.tar.bz2
+Source0:        https://pypi.io/packages/source/c/%{name}/%{name}-%{version}.tar.gz
 # fcami - this patch disables using upstream's repositories by default
 Patch0:         ceph-deploy_do-not-use-upstream-repos.patch
 BuildRoot:      %{_tmppath}/%{name}-%{version}-build
 BuildRequires:  python-devel
-BuildRequires:  python-distribute
 BuildRequires:  python-setuptools
-BuildRequires:  python-virtualenv
 BuildRequires:  python-mock
-BuildRequires:  python-tox
 %if 0%{?suse_version}
 BuildRequires:  python-pytest
 %else
 BuildRequires:  pytest
 %endif
 BuildRequires:  git
-Requires:       python-argparse
-Requires:       python-distribute
 #Requires:      lsb-release
 #Requires:      ceph
 %if 0%{?suse_version} && 0%{?suse_version} <= 1110
@@ -62,11 +57,14 @@ An easy to use admin tool for deploy ceph storage clusters.
 %patch0 -p1 -b .disable-repos
 
 %build
-#python setup.py build
+python setup.py build
 
 %install
 python setup.py install --prefix=%{_prefix} --root=%{buildroot}
 install -m 0755 -D scripts/ceph-deploy $RPM_BUILD_ROOT/usr/bin
+
+%check
+python setup.py test
 
 %clean
 [ "$RPM_BUILD_ROOT" != "/" ] && rm -rf "$RPM_BUILD_ROOT"
@@ -78,6 +76,11 @@ install -m 0755 -D scripts/ceph-deploy $RPM_BUILD_ROOT/usr/bin
 %{python_sitelib}/*
 
 %changelog
+* Tue Jul 19 2016 Haïkel Guémar <hguemar@fedoraproject.org> - 1.5.32-1
+- Upstream 1.5.32
+- Drop useless requirements on python-distribute, python-virtualenv and tox
+- Run unit tests
+
 * Fri Jan 22 2016 François Cami <fcami@redhat.com> - 1.5.31-1
 - initial CentOS release
 - use upstream (ceph.com) ceph-deploy.spec, add dist tag
